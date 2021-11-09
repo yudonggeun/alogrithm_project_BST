@@ -1,9 +1,10 @@
 package algorithm_homework;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /** Class SplayTree **/
-class Splay_tree {
+class Splay_tree implements Tree{
 	/** Class Node **/
 	private class Node {
 		Node left, right, parent;
@@ -41,6 +42,12 @@ class Splay_tree {
 		return root == null;
 	}
 
+	public void insertArray(ArrayList<Integer> array) {
+		for(int value : array) {
+			insert(value);
+		}
+	}
+	
 	/** function to insert element */
 	public void insert(int ele) {
 		Node z = root;
@@ -179,8 +186,8 @@ class Splay_tree {
 	}
 
 	/** Functions to search for an element **/
-	public boolean search(int val) {
-		return findNode(val) != null;
+	public boolean search(Integer target) {
+		return findNode(target) != null;
 	}
 
 	private Node findNode(int ele) {
@@ -203,6 +210,10 @@ class Splay_tree {
 			return null;
 		}
 		return null;
+	}
+	
+	public void removeAll() {
+		root = null;
 	}
 
 	/** Function for inorder traversal **/

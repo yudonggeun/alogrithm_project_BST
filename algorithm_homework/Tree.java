@@ -1,8 +1,13 @@
 package algorithm_homework;
 
-public class Tree {
-	public boolean search(Integer target){
-		System.out.println("search");
-		return true;
-	}
+import java.util.ArrayList;
+
+interface Tree {
+	public void insert(int data);
+
+	public boolean search(Integer target);
+
+	public void removeAll();
+
+	public void insertArray(ArrayList<Integer> array);
 }

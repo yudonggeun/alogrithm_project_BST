@@ -3,7 +3,9 @@ package algorithm_homework;
 import java.io.*;
 import java.util.*;
 
-public class AVL_tree extends Tree{	
+import algorithm_homework.binary_tree.Node;
+
+public class AVL_tree implements Tree {
 	private class Node {
 		private Node left, right, parent;
 		private int height = 1;
@@ -13,52 +15,29 @@ public class AVL_tree extends Tree{
 			this.value = val;
 		}
 	}
-	
+
 	private Node root;
-	
-	AVL_tree(){
+
+	AVL_tree() {
 		root = null;
 	}
-	
+
 	private int height(Node N) {
 		if (N == null)
 			return 0;
 		return N.height;
 	}
-	public Node insert(int value) {
-		Node node = root;
-		if(root == null) {
-			root = new Node(value);
-			return root;
-		}
-		
-		if (value < node.value)
-			node.left = insert(node.left, value);
-		else
-			node.right = insert(node.right, value);
-		
-		node.height = Math.max(height(node.left), height(node.right)) + 1;
 
-		int balance = getBalance(node);
-
-		if (balance > 1 && value < node.left.value)
-			return rightRotate(node);
-
-		if (balance < -1 && value > node.right.value)
-			return leftRotate(node);
-		
-		if (balance > 1 && value > node.left.value) {
-			node.left = leftRotate(node.left);
-			return rightRotate(node);
+	public void insertArray(ArrayList<Integer> array) {
+		for(int value : array) {
+			insert(value);
 		}
-		if (balance < -1 && value < node.right.value) {
-			node.right = rightRotate(node.right);
-			return leftRotate(node);
-		}
-		root = node;
-		return node;
 	}
-	
+
+	public void insert(int value) {
+		root = insert(root, value);
+	}
+
 	private Node insert(Node node, int value) {
 		/* 1. Perform the normal BST rotation */
 		if (node == null) {
@@ -145,6 +124,10 @@ public class AVL_tree extends Tree{
 		return height(N.left) - height(N.right);
 	}
 
+	public void preOrder() {
+		preOrder(root);
+	}
+
 	public void preOrder(Node root) {
 		if (root != null) {
 			preOrder(root.left);
@@ -161,7 +144,11 @@ public class AVL_tree extends Tree{
 		return current;
 	}
 
-	private Node deleteNode(Node root, int value) {
+	public void delete(int value) {
+		root = delete(root, value);
+	}
+
+	private Node delete(Node root, int value) {
 		// STEP 1: PERFORM STANDARD BST DELETE
 
 		if (root == null)
@@ -170,12 +157,12 @@ public class AVL_tree extends Tree{
 		// If the value to be deleted is smaller than the root's value,
 		// then it lies in left subtree
 		if (value < root.value)
-			root.left = deleteNode(root.left, value);
+			root.left = delete(root.left, value);
 
 		// If the value to be deleted is greater than the root's value,
 		// then it lies in right subtree
 		else if (value > root.value)
-			root.right = deleteNode(root.right, value);
+			root.right = delete(root.right, value);
 
 		// if value is same as root's value, then This is the node
 		// to be deleted
@@ -206,7 +193,7 @@ public class AVL_tree extends Tree{
 				root.value = temp.value;
 
 				// Delete the inorder successor
-				root.right = deleteNode(root.right, temp.value);
+				root.right = delete(root.right, temp.value);
 			}
 		}
 
@@ -246,120 +233,24 @@ public class AVL_tree extends Tree{
 		return root;
 	}
 
-	public boolean search(Integer target){
-		System.out.println("search");
-		return true;
-	}
-	
-	public void print(Node root) {
-
-		if (root == null) {
-			System.out.println("(XXXXXX)");
-			return;
-		}
-
-		int height = root.height, width = (int) Math.pow(2, height - 1);
-
-		// Preparing variables for loop.
-		List<Node> current = new ArrayList<Node>(1), next = new ArrayList<Node>(2);
-		current.add(root);
-
-		final int maxHalfLength = 4;
-		int elements = 1;
-
-		StringBuilder sb = new StringBuilder(maxHalfLength * width);
-		for (int i = 0; i < maxHalfLength * width; i++)
-			sb.append(' ');
-		String textBuffer;
-
-		// Iterating through height levels.
-		for (int i = 0; i < height; i++) {
-
-			sb.setLength(maxHalfLength * ((int) Math.pow(2, height - 1 - i) - 1));
-
-			// Creating spacer space indicator.
-			textBuffer = sb.toString();
-
-			// Print tree node elements
-			for (Node n : current) {
-
-				System.out.print(textBuffer);
-
-				if (n == null) {
-
-					System.out.print("        ");
-					next.add(null);
-					next.add(null);
-
-				} else {
-
-					System.out.printf("(%6d)", n.value);
-					next.add(n.left);
-					next.add(n.right);
-
-				}
-
-				System.out.print(textBuffer);
-
-			}
-
-			System.out.println();
-			// Print tree node extensions for next level.
-			if (i < height - 1) {
-
-				for (Node n : current) {
-
-					System.out.print(textBuffer);
-
-					if (n == null)
-						System.out.print("        ");
-					else
-						System.out.printf("%s      %s", n.left == null ? " " : "/", n.right == null ? " " : "\\");
-
-					System.out.print(textBuffer);
-
-				}
-
-				System.out.println();
-
-			}
-
-			// Renewing indicators for next run.
-			elements *= 2;
-			current = next;
-			next = new ArrayList<Node>(elements);
-
-		}
-
-	}
-
-	public static void main(String args[]) {
-		AVL_tree t = new AVL_tree();
-		Node root = null;
-		while (true) {
-			System.out.println("(1) Insert");
-			System.out.println("(2) Delete");
-
-			try {
-				BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-				String s = bufferRead.readLine();
-
-				if (Integer.parseInt(s) == 1) {
-					System.out.print("Value to be inserted: ");
-					root = t.insert(Integer.parseInt(bufferRead.readLine()));
-				} else if (Integer.parseInt(s) == 2) {
-					System.out.print("Value to be deleted: ");
-					root = t.deleteNode(root, Integer.parseInt(bufferRead.readLine()));
-				} else {
-					System.out.println("Invalid choice, try again!");
-					continue;
-				}
-
-				t.print(root);
-			} catch (IOException e) {
-				e.printStackTrace();
+	public boolean search(Integer value) {
+		if (root == null)
+			return false;
+		Node p = root;
+		while (p != null) {
+			if (p.value == value) {
+				return true;
+			} else if (p.value < value) {
+				p = p.right;
+			} else {
+				p = p.left;
 			}
 		}
+		return false;
 	}
+
+	public void removeAll() {
+		root = null;
+	}
+
 }
-

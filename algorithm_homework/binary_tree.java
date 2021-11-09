@@ -1,6 +1,8 @@
 package algorithm_homework;
 
-public class binary_tree extends Tree{
+import java.util.ArrayList;
+
+public class binary_tree implements Tree{
 	static class Node {
 		int value;
 		Node left, right;
@@ -31,11 +33,11 @@ public class binary_tree extends Tree{
 		return node;
 	}
 	
-	public void insert(int value) {
+	public void insert(int data) {
 		if (root == null) {
-			root = mkNode(value, -1);
+			root = mkNode(data, -1);
 		} else {
-			insert(root, value);
+			insert(root, data);
 		}
 	}
 	private void insert(Node node, int value) {
@@ -70,19 +72,29 @@ public class binary_tree extends Tree{
 		}
 	}
 	
-	public Integer search(int value) {
-		if(root == null) return null;
+	public boolean search(Integer value) {
+		if(root == null) return false;
 		Node p = root;
 		while(p != null) {
 			if(p.value == value) {
-				return p.value;
+				return true;
 			} else if(p.value < value) {
 				p = p.right;
 			} else {
 				p = p.left;
 			}
 		}
-		return null;
+		return false;
+	}
+	
+	public void removeAll() {
+		root = null;
+	}
+	
+	public void insertArray(ArrayList<Integer> array) {
+		for(int value : array) {
+			insert(value);
+		}
 	}
 	
 	public int getHeight() {

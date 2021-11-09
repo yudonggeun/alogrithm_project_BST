@@ -1,9 +1,10 @@
 package algorithm_homework;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //create class CreateRedBlackTree for creating red-black tree  
-class RedBlack_tree {
+class RedBlack_tree implements Tree{
 	private class Node {
 		Node leftChild, rightChild;
 		int element;
@@ -34,7 +35,7 @@ class RedBlack_tree {
 	// variables are 0 and 1 respectively.
 	final int RED = 0;
 	final int BLACK = 1;
-	
+
 	// Constructor for creating header node
 	public RedBlack_tree(int header) {
 		nullNode = new Node(0);
@@ -54,15 +55,21 @@ class RedBlack_tree {
 	public boolean checkEmpty() {
 		return header.rightChild == nullNode;
 	}
-
-	// create insertNewNode() method for adding a new node in the red black tree
-	public void insertNewNode(int newElement) {
+	
+	public void insertArray(ArrayList<Integer> array) {
+		for(int value : array) {
+			insert(value);
+		}
+	}
+	
+	// create insert() method for adding a new node in the red black tree
+	public void insert(int data) {
 		current = parent = grand = header; // set header value to current, parent, and grand node
-		nullNode.element = newElement; // set newElement to the element of the null node
+		nullNode.element = data; // set newElement to the element of the null node
 
 		// repeat statements until the element of the current node will not equal to the
 		// value of the newElement
-		while (current.element != newElement) {
+		while (current.element != data) {
 			great = grand;
 			grand = parent;
 			parent = current;
@@ -70,12 +77,12 @@ class RedBlack_tree {
 			// if the value of the newElement is lesser than the current node element, the
 			// current node will point to the current left child else point to the current
 			// right child.
-			current = newElement < current.element ? current.leftChild : current.rightChild;
+			current = data < current.element ? current.leftChild : current.rightChild;
 
 			// Check whether both the children are RED or NOT. If both the children are RED
 			// change them by using handleColors() method
 			if (current.leftChild.color == RED && current.rightChild.color == RED)
-				handleColors(newElement);
+				handleColors(data);
 		}
 
 		// insertion of the new node will be fail if will already present in the tree
@@ -83,14 +90,14 @@ class RedBlack_tree {
 			return;
 
 		// create a node having no left and right child and pass it to the current node
-		current = new Node(newElement, nullNode, nullNode);
+		current = new Node(data, nullNode, nullNode);
 
 		// connect the current node with the parent
-		if (newElement < parent.element)
+		if (data < parent.element)
 			parent.leftChild = current;
 		else
 			parent.rightChild = current;
-		handleColors(newElement);
+		handleColors(data);
 	}
 
 	// create handleColors() method to maintain the colors of Red-black tree nodes
@@ -165,12 +172,12 @@ class RedBlack_tree {
 		}
 	}
 
-	// create searchNode() method to get desired node from the Red-Black tree
-	public boolean searchNode(int value) {
-		return searchNode(header.rightChild, value);
+	// create search() method to get desired node from the Red-Black tree
+	public boolean search(Integer target) {
+		return search(header.rightChild, target);
 	}
 
-	private boolean searchNode(Node node, int value) {
+	private boolean search(Node node, int value) {
 		boolean check = false;
 		while ((node != nullNode) && check != true) {
 			int nodeValue = node.element;
@@ -182,7 +189,7 @@ class RedBlack_tree {
 				check = true;
 				break;
 			}
-			check = searchNode(node, value);
+			check = search(node, value);
 		}
 		return check;
 	}
@@ -234,7 +241,7 @@ class RedBlack_tree {
 			System.out.print(node.element + "" + c + " ");
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		// create instance of the Scanner class
 		Scanner scan = new Scanner(System.in);
@@ -261,11 +268,11 @@ class RedBlack_tree {
 			switch (ch) {
 			case 1:
 				System.out.println("Please enter an element to insert in Red Black Tree");
-				obj.insertNewNode(scan.nextInt());
+				obj.insert(scan.nextInt());
 				break;
 			case 2:
 				System.out.println("Enter integer element to search");
-				System.out.println(obj.searchNode(scan.nextInt()));
+				System.out.println(obj.search(scan.nextInt()));
 				break;
 			case 3:
 				System.out.println(obj.nodesInTree());
@@ -296,5 +303,5 @@ class RedBlack_tree {
 			System.out.println("\nPress 'y' or 'Y' to continue \n");
 			choice = scan.next().charAt(0);
 		} while (choice == 'Y' || choice == 'y');
-	}	
+	}
 }
