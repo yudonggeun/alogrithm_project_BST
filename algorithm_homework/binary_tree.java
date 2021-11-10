@@ -22,43 +22,35 @@ public class binary_tree implements Tree{
 
 	private Node root;
 	private int height;
-	private int nodeCount;
 
 	public binary_tree() {
 		this.root = null;
 		this.height = 0;
-		this.nodeCount = 0;
 	}
 	
 	private Node mkNode(int value, int parentDepth) {
 		Node node = new Node(value);
-		this.nodeCount++;
 		node.depth = parentDepth+1;
 		this.height = Math.max(this.height, node.depth);
 		return node;
 	}
 	
 	public void insert(int data) {
-		if (root == null) {
-			root = mkNode(data, -1);
-		} else {
-			insert(root, data);
-		}
+		root = insert(root, data);
 	}
-	private void insert(Node node, int value) {
-		if (value < node.value) {
-			if (node.left != null) {
-				insert(node.left, value);
-			} else {
-				node.left = mkNode(value, node.depth);
-			}
-		} else if (value > node.value) {
-			if (node.right != null) {
-				insert(node.right, value);
-			} else {
-				node.right = mkNode(value, node.depth);
-			}
+	private Node insert(Node node, int value) {
+		if(node == null) {
+			node = mkNode(value, -1);
+			return node;
 		}
+		
+		if (value < node.value) {
+			node.left = insert(node.left, value);
+		} 
+		else if (value > node.value) {
+			node.right = insert(node.right, value);
+		}
+		return node;
 	}
 	
 	public void traverseInOrder() {
