@@ -233,24 +233,47 @@ public class AVL_tree implements Tree {
 		return root;
 	}
 
-	public boolean search(Integer value) {
+	public long search(Integer value) {
 		if (root == null)
-			return false;
+			return -1;
+		
+		long time = System.currentTimeMillis();
+		
 		Node p = root;
 		while (p != null) {
 			if (p.value == value) {
-				return true;
+				time = System.currentTimeMillis() - time;
+				return time;
 			} else if (p.value < value) {
 				p = p.right;
 			} else {
 				p = p.left;
 			}
 		}
-		return false;
+		return -1;
 	}
 
 	public void removeAll() {
 		root = null;
+	}
+
+	@Override
+	public int getSize() {
+		Queue<Node> queue = new LinkedList<Node>();
+		int count = 0;
+		if(root == null) 
+			return 0;
+	
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			Node node = queue.poll();
+			count++;
+			if(node.left != null)
+				queue.add(node.left);
+			if(node.right != null)
+				queue.add(node.right);
+		}
+		return count;
 	}
 
 }

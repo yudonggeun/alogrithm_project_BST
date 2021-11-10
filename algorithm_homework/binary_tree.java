@@ -1,6 +1,8 @@
 package algorithm_homework;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class binary_tree implements Tree{
 	static class Node {
@@ -45,14 +47,12 @@ public class binary_tree implements Tree{
 			if (node.left != null) {
 				insert(node.left, value);
 			} else {
-				System.out.println(" Inserted " + value + " to left of " + node.value);
 				node.left = mkNode(value, node.depth);
 			}
 		} else if (value > node.value) {
 			if (node.right != null) {
 				insert(node.right, value);
 			} else {
-				System.out.println("  Inserted " + value + " to right of " + node.value);
 				node.right = mkNode(value, node.depth);
 			}
 		}
@@ -72,19 +72,43 @@ public class binary_tree implements Tree{
 		}
 	}
 	
-	public boolean search(Integer value) {
-		if(root == null) return false;
+	public long search(Integer value) {
+		if (root == null)
+			return -1;
+		
+		long time = System.currentTimeMillis();
+		
 		Node p = root;
-		while(p != null) {
-			if(p.value == value) {
-				return true;
-			} else if(p.value < value) {
+		while (p != null) {
+			if (p.value == value) {
+				time = System.currentTimeMillis() - time;
+				return time;
+			} else if (p.value < value) {
 				p = p.right;
 			} else {
 				p = p.left;
 			}
 		}
-		return false;
+		return -1;
+	}
+	
+	@Override
+	public int getSize() {
+		Queue<Node> queue = new LinkedList<Node>();
+		int count = 0;
+		if(root == null) 
+			return 0;
+	
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			Node node = queue.poll();
+			count++;
+			if(node.left != null)
+				queue.add(node.left);
+			if(node.right != null)
+				queue.add(node.right);
+		}
+		return count;
 	}
 	
 	public void removeAll() {

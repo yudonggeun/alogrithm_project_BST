@@ -1,6 +1,8 @@
 package algorithm_homework;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 /** Class SplayTree **/
@@ -185,9 +187,13 @@ class Splay_tree implements Tree{
 		return count;
 	}
 
-	/** Functions to search for an element **/
-	public boolean search(Integer target) {
-		return findNode(target) != null;
+	/** Functions to searchNode for an element **/
+	public long search(Integer value) {
+		long time = System.currentTimeMillis();
+		if(findNode(value) == null) {
+			return -1;
+		}
+		return System.currentTimeMillis()-time;
 	}
 
 	private Node findNode(int ele) {
@@ -210,6 +216,25 @@ class Splay_tree implements Tree{
 			return null;
 		}
 		return null;
+	}
+	
+	@Override
+	public int getSize() {
+		Queue<Node> queue = new LinkedList<Node>();
+		int count = 0;
+		if(root == null) 
+			return 0;
+		
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			Node node = queue.poll();
+			count++;
+			if(node.left != null)
+				queue.add(node.left);
+			if(node.right != null)
+				queue.add(node.right);
+		}
+		return count;
 	}
 	
 	public void removeAll() {
@@ -267,7 +292,7 @@ class Splay_tree implements Tree{
 			System.out.println("\nSplay Tree Operations\n");
 			System.out.println("1. insert ");
 			System.out.println("2. remove ");
-			System.out.println("3. search");
+			System.out.println("3. searchNode");
 			System.out.println("4. count nodes");
 			System.out.println("5. check empty");
 
@@ -282,8 +307,8 @@ class Splay_tree implements Tree{
 				spt.remove(scan.nextInt());
 				break;
 			case 3:
-				System.out.println("Enter integer element to search");
-				System.out.println("Search result : " + spt.search(scan.nextInt()));
+				System.out.println("Enter integer element to searchNode");
+				System.out.println("searchNode result : " + spt.search(scan.nextInt()));
 				break;
 			case 4:
 				System.out.println("Nodes = " + spt.countNodes());

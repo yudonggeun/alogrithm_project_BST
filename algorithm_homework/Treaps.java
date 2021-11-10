@@ -1,6 +1,8 @@
 package algorithm_homework;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 class Treaps implements Tree{
@@ -82,12 +84,20 @@ class Treaps implements Tree{
 		}
 	}
 	
-	public boolean search(Integer key) {
-		return search(root, key);
+	public long search(Integer value) {
+		long time = System.currentTimeMillis();
+		if(!searchNode(value)) {
+			return -1;
+		}
+		return System.currentTimeMillis()-time;
 	}
 	
-	// Recursive function to search for a key in a given treap
-	public boolean search(Node root, int key) {
+	public boolean searchNode(Integer key) {
+		return searchNode(root, key);
+	}
+	
+	// Recursive function to searchNode for a key in a given treap
+	public boolean searchNode(Node root, int key) {
 		// if the key is not present in the tree
 		if (root == null) {
 			return false;
@@ -98,13 +108,13 @@ class Treaps implements Tree{
 			return true;
 		}
 
-		// if the key is less than the root node, search in the left subtree
+		// if the key is less than the root node, searchNode in the left subtree
 		if (key < root.data) {
-			return search(root.left, key);
+			return searchNode(root.left, key);
 		}
 
-		// otherwise, search in the right subtree
-		return search(root.right, key);
+		// otherwise, searchNode in the right subtree
+		return searchNode(root.right, key);
 	}
 
 	public void delete(int key) {
@@ -163,6 +173,25 @@ class Treaps implements Tree{
 		}
 
 		return root;
+	}
+	
+	@Override
+	public int getSize() {
+		Queue<Node> queue = new LinkedList<Node>();
+		int count = 0;
+		if(root == null) 
+			return 0;
+		
+		queue.add(root);
+		while(!queue.isEmpty()) {
+			Node node = queue.poll();
+			count++;
+			if(node.left != null)
+				queue.add(node.left);
+			if(node.right != null)
+				queue.add(node.right);
+		}
+		return count;
 	}
 
 	public void removeAll() {
