@@ -6,6 +6,9 @@ import java.util.*;
 import algorithm_homework.binary_tree.Node;
 
 public class AVL_tree implements Tree {
+	
+	private final String name = "AVLTree";
+	
 	private class Node {
 		private Node left, right, parent;
 		private int height = 1;
@@ -257,6 +260,22 @@ public class AVL_tree implements Tree {
 		root = null;
 	}
 
+	@Override
+	public long searchAll(ArrayList<Integer> testcase) {
+		long starttime = System.currentTimeMillis();
+		long endtime = 0;
+		for(Integer target : testcase) {
+			search(target);
+		}
+		endtime = System.currentTimeMillis();
+		return endtime - starttime;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
 	@Override
 	public int getSize() {
 		Queue<Node> queue = new LinkedList<Node>();

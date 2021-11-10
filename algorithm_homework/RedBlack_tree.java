@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Queue;
 
 public class RedBlack_tree implements Tree {
-
+	
+	private final String name = "RedBlackTree";
+	
 	private class Node {
 
 	    /** Possible color for this node */
@@ -748,6 +750,22 @@ public class RedBlack_tree implements Tree {
 				queue.add(node.right);
 		}
 		return count;
+	}
+
+	@Override
+	public long searchAll(ArrayList<Integer> testcase) {
+		long starttime = System.currentTimeMillis();
+		long endtime = 0;
+		for(Integer target : testcase) {
+			search(target);
+		}
+		endtime = System.currentTimeMillis();
+		return endtime - starttime;
+	}
+
+	@Override
+	public String getName() {
+		return name;
 	}
 
 }

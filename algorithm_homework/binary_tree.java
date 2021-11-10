@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class binary_tree implements Tree{
+	
+	private final String name = "BST";
+	
 	static class Node {
 		int value;
 		Node left, right;
@@ -90,6 +93,22 @@ public class binary_tree implements Tree{
 			}
 		}
 		return -1;
+	}
+	
+	@Override
+	public long searchAll(ArrayList<Integer> testcase) {
+		long starttime = System.currentTimeMillis();
+		long endtime = 0;
+		for(Integer target : testcase) {
+			search(target);
+		}
+		endtime = System.currentTimeMillis();
+		return endtime - starttime;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
 	}
 	
 	@Override

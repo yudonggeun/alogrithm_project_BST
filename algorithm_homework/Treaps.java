@@ -6,7 +6,9 @@ import java.util.Queue;
 import java.util.Random;
 
 class Treaps implements Tree{
-
+	
+	private final String name = "Treap";
+	
 	private class Node {
 		int data;
 		int priority;
@@ -194,6 +196,22 @@ class Treaps implements Tree{
 		return count;
 	}
 
+	@Override
+	public long searchAll(ArrayList<Integer> testcase) {
+		long starttime = System.currentTimeMillis();
+		long endtime = 0;
+		for(Integer target : testcase) {
+			search(target);
+		}
+		endtime = System.currentTimeMillis();
+		return endtime - starttime;
+	}
+	
+	@Override
+	public String getName() {
+		return name;
+	}
+	
 	public void removeAll() {
 		root = null;
 	}
